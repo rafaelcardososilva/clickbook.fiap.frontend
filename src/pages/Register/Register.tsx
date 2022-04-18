@@ -9,12 +9,16 @@ import {
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 import { useRequest } from '../../hooks/useRequest';
 import { register } from '../../models/register.model';
 import { createRegister } from '../../services/register';
+import Alert from '../../componentes/Alert';
 
 const Register: React.FC = () => {
+  let navigate = useNavigate();
+
   const { createRequest, isFailure, isLoading, isSuccess } =
     useRequest(createRegister);
   const [name, setName] = useState<string>('');
@@ -27,6 +31,12 @@ const Register: React.FC = () => {
     return password === passwordAgain && password !== '';
   };
 
+  if (isSuccess) {
+    setTimeout(() => {
+      navigate('/login');
+    }, 2000);
+  }
+
   const handleSubmit = async () => {
     const data: register = {
       name,
@@ -38,14 +48,10 @@ const Register: React.FC = () => {
     if (validateForm()) {
       setFormIsInvalid(false);
       await createRequest(data);
-
-      // const { isLoading, isError, isSuccess } = response;
     } else {
       setFormIsInvalid(true);
     }
   };
-
-  console.log('isLoading', isLoading);
 
   return (
     <Container p={'0 16px'}>
@@ -85,10 +91,28 @@ const Register: React.FC = () => {
         <FormErrorMessage>Senhas inválidas ou não são iguais.</FormErrorMessage>
       </FormControl>
       <Grid margin={'24px 0'}>
-        <Button colorScheme={'yellow'} onClick={handleSubmit}>
+        <Button
+          colorScheme={'yellow'}
+          onClick={handleSubmit}
+          isLoading={isLoading}
+        >
           Cadastrar
         </Button>
       </Grid>
+      {isFailure && (
+        <Alert
+          title={'Erro!'}
+          status={'error'}
+          description={'Falha ao registrar o cadastro, tente novamente.'}
+        />
+      )}
+      {isSuccess && (
+        <Alert
+          title={'Parabéns!'}
+          status={'success'}
+          description={'Seu cadastro foi realizado com sucesso.'}
+        />
+      )}
     </Container>
   );
 };

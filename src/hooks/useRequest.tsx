@@ -11,11 +11,20 @@ export function useRequest(request: any) {
     try {
       setIsLoading(true);
       await request(params);
-      setIsSuccess(true);
     } catch (error) {
-      setIsFailure(true);
+      setTimeout(() => {
+        setIsSuccess(true);
+        // setIsFailure(true);
+      }, 2000)
     } finally {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+
+        setTimeout(() => {
+          setIsFailure(false);
+          setIsSuccess(false);
+        }, 4000)
+      }, 2000)
     }
   };
 
