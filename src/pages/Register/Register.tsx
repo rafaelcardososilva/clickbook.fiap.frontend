@@ -12,7 +12,6 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 import { useRequest } from '../../hooks/useRequest';
-import { register } from '../../models/register.model';
 import { createRegister } from '../../services/register';
 import Alert from '../../componentes/Alert';
 
@@ -38,11 +37,10 @@ const Register: React.FC = () => {
   }
 
   const handleSubmit = async () => {
-    const data: register = {
-      name,
+    const data = {
+      nome: name,
       email,
-      password,
-      passwordAgain,
+      senha: password,
     };
 
     if (validateForm()) {

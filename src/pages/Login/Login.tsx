@@ -12,20 +12,22 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { asyncSignIn, selectLogin } from '../../redux/loginSlice';
+import Alert from '../../componentes/Alert';
+
 import { AppDispatch } from '../../redux/store';
+import { signIn, selectLogin } from '../../redux/loginSlice';
 
 const Login: React.FC = () => {
   let navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
 
-  const { isLogged, isLoading } = useSelector(selectLogin);
+  const { isLogged, isLoading, isFailure } = useSelector(selectLogin);
 
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
   const handleSignIn = () => {
-    dispatch(asyncSignIn(email, password));
+    dispatch(signIn(email, password));
   };
 
   useEffect(() => {
@@ -74,6 +76,13 @@ const Login: React.FC = () => {
             </Link>
           </Box>
         </Flex>
+        {isFailure && (
+          <Alert
+            title={'Erro!'}
+            status={'error'}
+            description={'E-mail ou senha inválidos'}
+          />
+        )}
       </FormControl>
     </>
   );
