@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { AxiosResponse } from 'axios';
+import { useState } from 'react';
 
 export function useRequest(request: any) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -7,26 +6,19 @@ export function useRequest(request: any) {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [data, setData] = useState<any>(null);
 
-  const createRequest = async (params: any) => {
+  const createRequest = async (params: any | null) => {
+    setIsLoading(false);
     try {
       setIsLoading(true);
-      await request(params);
+      const response = await request(params);
+      setData(response.data);
+      setIsSuccess(true);
     } catch (error) {
-      setTimeout(() => {
-        setIsSuccess(true);
-        // setIsFailure(true);
-      }, 2000)
+      setIsFailure(true);
     } finally {
-      setTimeout(() => {
-        setIsLoading(false);
-
-        setTimeout(() => {
-          setIsFailure(false);
-          setIsSuccess(false);
-        }, 4000)
-      }, 2000)
+      setIsLoading(false);
     }
   };
 
-  return { isLoading, isFailure, isSuccess, createRequest };
+  return { data, isLoading, isFailure, isSuccess, createRequest };
 }

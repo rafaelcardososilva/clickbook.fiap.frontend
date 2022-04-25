@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-export const FEE_URL = '/feed';
-export const REGISTER_URL = '/register';
+export const FEED_URL = '/posts/posts';
+export const REGISTER_URL = '/cadastros';
+export const LOGIN_URL = '/cadastros/buscar';
 
 import ENV from '../environments/environment';
 
